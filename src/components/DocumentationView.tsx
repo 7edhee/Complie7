@@ -3,7 +3,7 @@ import { BookOpen, Terminal, Cpu, FileCode, CheckCircle2, ChevronRight, Copy, Ch
 import { SyntaxHighlight } from '../utils/syntaxHighlight';
 
 export function DocumentationView() {
-  const [activeGuide, setActiveGuide] = useState<'c-guide' | 'cpp-guide' | 'csharp-guide' | 'interrupts' | 'architecture'>('c-guide');
+  const [activeGuide, setActiveGuide] = useState<'c-guide' | 'cpp-guide' | 'csharp-guide' | 'interrupts' | 'architecture' | 'hosting'>('c-guide');
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
   const handleCopyCode = (id: string, text: string) => {
@@ -19,6 +19,18 @@ export function DocumentationView() {
         <div className="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">
           Guides & References
         </div>
+
+        <button
+          onClick={() => setActiveGuide('hosting')}
+          className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-lg transition-colors text-left ${
+            activeGuide === 'hosting'
+              ? 'bg-amber-500/15 text-amber-300 font-semibold border border-amber-500/30'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+          }`}
+        >
+          <span className="font-semibold text-emerald-400">Hosting & Deployment</span>
+          <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+        </button>
 
         <button
           onClick={() => setActiveGuide('c-guide')}
@@ -250,6 +262,109 @@ export function DocumentationView() {
                   First 1024 bytes holding 256 Far Pointers (Segment:Offset) to system interrupt handlers.
                 </p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Guide 6: Hosting & Deployment */}
+        {activeGuide === 'hosting' && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                <Terminal className="w-5 h-5 text-emerald-400" />
+                <span>How to Host & Deploy DOSBox Compiler Studio</span>
+              </h2>
+              <p className="text-xs text-slate-300 leading-relaxed mt-1">
+                Because this application is built with React 19, TypeScript, and Vite, it compiles into static client-side production files that can be hosted anywhere for free in under 2 minutes.
+              </p>
+            </div>
+
+            {/* Option 1: AI Studio Built-in Instant Hosting */}
+            <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-400 font-mono">Option 1: Built-in Live URL (Already Active!)</span>
+                <span className="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded">
+                  Instant
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                This app is already built and live on Google Cloud Run via AI Studio. You can test it in development mode or share the public preview link with anyone directly without any server setup.
+              </p>
+            </div>
+
+            {/* Option 2: GitHub Pages */}
+            <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-200 font-mono">Option 2: Deploy to GitHub Pages (Free)</span>
+                <button
+                  onClick={() => handleCopyCode('ghpages', 'npm run build\nnpx gh-pages -d dist')}
+                  className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200"
+                >
+                  {copiedSection === 'ghpages' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  <span>{copiedSection === 'ghpages' ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
+              <p className="text-xs text-slate-400">
+                To host on your GitHub repository (<code className="text-amber-300 font-mono">adheeexe/dosbox-compiler-suite</code>):
+              </p>
+              <pre className="font-mono text-xs text-slate-200 bg-slate-900/80 p-3 rounded overflow-x-auto leading-relaxed">
+{`# 1. Build the production bundle
+npm run build
+
+# 2. Deploy the dist folder to the gh-pages branch
+npx gh-pages -d dist`}
+              </pre>
+              <p className="text-[11px] text-slate-500">
+                Then go to repository Settings &gt; Pages &gt; Source: Select "gh-pages branch". Your site will be live at: <code className="text-slate-300">https://adheeexe.github.io/dosbox-compiler-suite</code>.
+              </p>
+            </div>
+
+            {/* Option 3: Vercel / Netlify / Cloudflare Pages */}
+            <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-200 font-mono">Option 3: Vercel / Netlify / Cloudflare Pages (1-Click)</span>
+                <button
+                  onClick={() => handleCopyCode('vercel', 'npm i -g vercel\nvercel --prod')}
+                  className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200"
+                >
+                  {copiedSection === 'vercel' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  <span>{copiedSection === 'vercel' ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
+              <ul className="text-xs text-slate-400 space-y-1 list-disc list-inside">
+                <li>Connect your GitHub account to <strong className="text-slate-300">Vercel</strong> or <strong className="text-slate-300">Netlify</strong>.</li>
+                <li>Select the <code className="text-amber-300 font-mono">dosbox-compiler-suite</code> repository.</li>
+                <li>Build Command: <code className="text-slate-200 font-mono">npm run build</code></li>
+                <li>Output Directory: <code className="text-slate-200 font-mono">dist</code></li>
+                <li>Automatic continuous deployment on every Git push!</li>
+              </ul>
+            </div>
+
+            {/* Option 4: Docker or Nginx VPS */}
+            <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-200 font-mono">Option 4: Dockerfile (Self-Hosted VPS / Cloud Run)</span>
+                <button
+                  onClick={() => handleCopyCode('docker', 'FROM node:20-alpine AS build\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN npm run build\n\nFROM nginx:alpine\nCOPY --from=build /app/dist /usr/share/nginx/html\nEXPOSE 80\nCMD ["nginx", "-g", "daemon off;"]')}
+                  className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200"
+                >
+                  {copiedSection === 'docker' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  <span>{copiedSection === 'docker' ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
+              <pre className="font-mono text-[11px] text-slate-300 bg-slate-900/80 p-3 rounded overflow-x-auto leading-relaxed">
+{`FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]`}
+              </pre>
             </div>
           </div>
         )}
