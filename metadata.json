@@ -1,0 +1,6 @@
+{
+  "name": "DOSBox Compiler Studio & Repository",
+  "description": "Compile C, C++, and C# applications for DOSBox, explore the open-source repository, contribute custom modules and patches, and run retro executables with an interactive emulator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
